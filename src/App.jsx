@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import AssignmentForm from "./components/AssignmentForm";
 import AssignmentList from "./components/AssignmentList";
 import "./App.css";
@@ -18,21 +20,22 @@ function App() {
   };
 
   return (
-    <div className="container">
-      {/* Left empty space (or future content) */}
-      <div className="left"></div>
-
-      {/* Right side (one flex column) */}
-      <div className="right">
-        <AssignmentForm onAdd={handleAddAssignment} />
-
-        <AssignmentList
-          assignments={assignments}
-          onToggle={handleToggleCompleted}
-        />
+    <>
+      <Header />
+      <div className="container">
+        <div className="left"></div>
+        <div className="right">
+          <AssignmentForm onAdd={handleAddAssignment} />
+          <AssignmentList
+            assignments={assignments}
+            onToggle={handleToggleCompleted}
+          />
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
+
 
 export default App;
