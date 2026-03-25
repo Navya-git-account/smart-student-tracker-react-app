@@ -47,14 +47,14 @@ function AssignmentForm({ onAdd }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-
+        
         <input
           type="text"
           placeholder="Subject"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         />
-
+        
         <input
           type="date"
           value={deadline}
