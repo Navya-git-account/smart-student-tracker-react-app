@@ -6,7 +6,8 @@ function CourseForm({ onAddCourse }) {
     startDate: "",
     endDate: "",
     instructor: "",
-    credits: ""
+    credits: "",
+    grade: ""
   });
 
   const handleChange = (e) => {
@@ -27,7 +28,8 @@ function CourseForm({ onAddCourse }) {
       !formData.startDate ||
       !formData.endDate ||
       !formData.instructor ||
-      !formData.credits
+      !formData.credits ||
+      !formData.grade
     ) {
       alert("All fields are required");
       return;
@@ -44,12 +46,13 @@ function CourseForm({ onAddCourse }) {
       startDate: "",
       endDate: "",
       instructor: "",
-      credits: ""
+      credits: "",
+      grade: ""
     });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className= "course-form" >
       <h3>Add Course</h3>
 
       <input
@@ -94,6 +97,19 @@ function CourseForm({ onAddCourse }) {
         onChange={handleChange}
         required
       />
+      <select
+        name="grade"
+        value={formData.grade}
+        onChange={handleChange}
+        required
+      >
+        <option value="">Select Grade</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="F">F</option>
+      </select>
 
       <button type="submit">Add Course</button>
     </form>
