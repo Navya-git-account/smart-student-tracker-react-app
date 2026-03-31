@@ -31,6 +31,29 @@ function App() {
   const deleteCourse = (id) => {
     setCourses(courses.filter(c => c.id !== id));
   };
+  const getGradePoints = (grade) => {
+    switch (grade) {
+      case "A": return 4;
+      case "B": return 3;
+      case "C": return 2;
+      case "D": return 1;
+      case "F": return 0;
+      default: return 0;
+    }
+  };
+
+  const calculateGPA = () => {
+    let totalPoints = 0;
+    let totalCredits = 0;
+
+    courses.forEach(course => {
+      const points = getGradePoints(course.grade);
+      totalPoints += points * Number(course.credits);
+      totalCredits += Number(course.credits);
+    });
+
+    return totalCredits === 0 ? 0 : (totalPoints / totalCredits).toFixed(2);
+  };
 
   return (
     <>
@@ -44,7 +67,7 @@ function App() {
             <p>
               Track assignments, monitor grades, and manage your academic progress
               all in one place. </p>
-              <p> [Go to Dashboard]</p>
+            <p> [Go to Dashboard]</p>
           </div>
         )}
         {activePage === "dashboard" && (
@@ -57,6 +80,10 @@ function App() {
                 assignments={assignments}
                 onToggle={handleToggleCompleted}
               />
+            </div>
+            <div className="gpa-block">
+              <h2>Your GPA</h2>
+              <p>{calculateGPA()}</p>
             </div>
 
             {/* Course Block */}
