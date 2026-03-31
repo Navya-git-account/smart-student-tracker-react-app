@@ -1,18 +1,27 @@
 body, html {
   margin: 10;
   padding: 10;
-  width: 100%;
-  max-height: 100%;
+  width: 100vw;  /* 100% of the viewport width */
+  height: 100vh; /* 100% of the viewport height */
   overflow: hidden; /* prevents scrolling */
 
 }
 /* Parent container → left & right layout */
-.container {
+.dashboard-page {
   display: flex;
   height: calc(100vh - 100px); /* adjust if header/footer height changes */
   padding: 20px;
   gap: 20px;
 }
+.home-page {
+  height: calc(100vh - 100px); /* full viewport height minus header/footer height */
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  flex-direction: column;
+  text-align: center;
+}
+
 
 /* Left side (Assignments) */
 .assignmentform {
@@ -21,10 +30,11 @@ body, html {
   flex-direction: column;
   gap: 20px;
   width: 100px;
-  background-color: #bac0f3; /* optional */
+  background-color:#3f404656; /* optional */
+; /* optional */
   padding: 50px;
   border-radius: 30px;
-  margin-bottom: 5%;
+  margin: 5%;
 }
 
 /* Right side (Courses) */
@@ -34,10 +44,10 @@ body, html {
   flex-direction: column;
   gap: 20px;
   width: 35%;
-  background-color: #bac0f3; /* optional */
+  background-color: #3f404656; /* optional */
   padding: 50px;
   border-radius: 30px;
-  margin-bottom: 5%;
+  margin: 5%;
 }
 .course-card {
   border: 1px solid #ddd;
@@ -80,32 +90,65 @@ body, html {
 }
 /* Header */
 .header {
-  height: 60px;
+  position: fixed;
+  top: 0;          /* Stick to top */
+  left: 0;
+  height: 80px;
+  width: 100%;     /* Full width */
   background-color: #7a7878;
+  padding: 0 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 /* Nav buttons with space between them */
+
+/* Header container */
 .nav-header {
+  flex: 1;
   display: flex;
-  gap: 20px; /* space between buttons */
+  justify-content: flex-end; /* align buttons to the left */
+  align-items: center;         /* vertical center */
+  gap: 10px;                   /* space between buttons */
+  padding: 10px 20px;          /* add horizontal padding so buttons don't touch edge */
+  width: 80%;                 /* full width */
+  box-sizing: border-box;      /* include padding in width */
+  overflow-x: auto;            /* allow horizontal scroll if buttons exceed width */
 }
 
+/* Buttons inside header */
 .nav-header button {
+  flex: 0 0 auto;              /* prevent buttons from shrinking */
   padding: 5px 15px;
   cursor: pointer;
-  border: none;
+  border: none;               
   background-color: #e0e0e0;
   border-radius: 5px;
   transition: background 0.3s;
+  white-space: nowrap;          /* prevent text from wrapping */
+  font-size: 14px;
 }
 
-.nav button:hover {
+/* Optional: hover effect */
+.nav-header button:hover {
   background-color: #d0d0d0;
+}
+
+.about-page {
+  height: calc(100vh - 100px);
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  flex-direction: column;
+  text-align: center;
+}
+.contact-page {
+  height: calc(100vh - 100px);
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  flex-direction: column;
+  text-align: center;
 }
 .footer {
     position: fixed; /* Fixes the footer to the viewport */
