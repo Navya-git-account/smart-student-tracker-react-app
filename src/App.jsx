@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AssignmentForm from "./components/AssignmentForm";
@@ -6,6 +6,9 @@ import AssignmentList from "./components/AssignmentList";
 import CourseForm from "./components/CourseForm";
 import CourseList from "./components/CourseList";
 import "./App.css";
+
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {
@@ -55,6 +58,33 @@ function App() {
     return totalCredits === 0 ? 0 : (totalPoints / totalCredits).toFixed(2);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+
+      setAssignments(prevAssignments => {
+        return prevAssignments.map(a => {
+          const deadline = new Date(a.deadline);
+          const twoHours = 2 * 60 * 60 * 1000;
+
+          if (!a.reminded && deadline - now > 0 && deadline - now <= twoHours) {
+            // Show toast notification
+            toast.info(`⏰ Assignment "${a.title}" is due soon!`, {
+              position: "top-right",
+              autoClose: 5000
+            });
+
+            return { ...a, reminded: true }; // mark as reminded
+          }
+
+          return a;
+        });
+      });
+    }, 60000); // check every 1 minute
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, []);
+
   return (
     <>
       {/* pass setactivepage to header for navigation */}
@@ -72,6 +102,34 @@ function App() {
         )}
         {activePage === "dashboard" && (
           <div className="dashboard-page">
+            <div className="upcoming-deadline-block">
+              <h2>Next Upcoming Assignment</h2>
+              {assignments.length === 0 ? (
+                <p>No upcoming assignments</p>
+              ) : (
+                (() => {
+                  const now = new Date();
+                  const upcoming = assignments
+                    .filter(a => new Date(a.deadline) > now)
+                    .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))[0];
+
+                  if (!upcoming) return <p>No upcoming assignments</p>;
+
+                  const timeLeft = Math.max(new Date(upcoming.deadline) - now, 0);
+                  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+                  return (
+                    <div className="assignment-card">
+                      <p><strong>{upcoming.title}</strong> ({upcoming.subject})</p>
+                      <p>Due: {new Date(upcoming.deadline).toLocaleString()}</p>
+                      <p>⏳ Time left: {hours}h {minutes}m</p>
+                    </div>
+                  );
+                })()
+              )}
+            </div>
+
             {/* Assignment Block */}
             <div className="assignmentform">
               <h2>Assignments</h2>
@@ -132,6 +190,7 @@ function App() {
       </div>
 
       <Footer />
+      <ToastContainer />
     </>
   );
 

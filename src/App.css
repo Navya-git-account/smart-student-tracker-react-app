@@ -177,6 +177,17 @@ body, html {
     text-align: center;
     padding: 10px 0;
 }
+/* Upcoming assignment block container */
+.upcoming-deadline-block {
+  background-color: #fdf6e3; /* light cream */
+  border-left: 5px solid #ff9900; /* highlight with orange */
+  padding: 16px;
+  margin: 5% auto;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  max-width: 400px;
+}
+
 /* ========= Responsive Layout ========= */
 
 /* Mobile-first (default stacking) */
