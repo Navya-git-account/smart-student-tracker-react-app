@@ -1,10 +1,11 @@
 body, html {
-  margin: 10;
-  padding: 10;
-  width: 100vw;  /* 100% of the viewport width */
-  height: 100vh; /* 100% of the viewport height */
-  overflow: hidden; /* prevents scrolling */
-
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: Arial, sans-serif;
 }
 /* Parent container → left & right layout */
 .dashboard-page {
@@ -76,19 +77,6 @@ body, html {
   border-top: 1px solid #ccc;
 }
 
-/* Optional: style scrollbars (modern browsers) */
-.course-list-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.course-list-container::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 3px;
-}
-
-.course-list-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
 .gpa-block {
 
   background-color: #f4f4f9;
@@ -115,14 +103,15 @@ body, html {
 /* Header */
 .header {
   position: fixed;
-  top: 0;          /* Stick to top */
+  top: 0;
   left: 0;
-  height: 80px;
-  width: 100%;     /* Full width */
+  height: clamp(60px, 8vw, 80px); /* fluid height */
+  width: 100%;
   background-color: #7a7878;
-  padding: 0 20px;
   display: flex;
   align-items: center;
+  padding: 0 clamp(10px, 5vw, 20px);
+  z-index: 1000;
 }
 
 /* Nav buttons with space between them */
@@ -131,31 +120,36 @@ body, html {
 .nav-header {
   flex: 1;
   display: flex;
-  justify-content: flex-end; /* align buttons to the left */
-  align-items: center;         /* vertical center */
-  gap: 10px;                   /* space between buttons */
-  padding: 10px 20px;          /* add horizontal padding so buttons don't touch edge */
-  width: 80%;                 /* full width */
-  box-sizing: border-box;      /* include padding in width */
-  overflow-x: auto;            /* allow horizontal scroll if buttons exceed width */
+  justify-content: space-evenly;
+  gap: clamp(5px, 2vw, 10px);
+  overflow-x: auto;
 }
 
-/* Buttons inside header */
 .nav-header button {
-  flex: 0 0 auto;              /* prevent buttons from shrinking */
-  padding: 5px 15px;
+  flex: 0 0 auto;
+  padding: clamp(5px, 1vw, 5px) clamp(5px, 1vw, 5px);
   cursor: pointer;
-  border: none;               
-  background-color: #e0e0e0;
+  border: none;
   border-radius: 5px;
+  font-size: clamp(12px, 1vw, 16px);
+  white-space: nowrap;
+  background-color: #e0e0e0;
   transition: background 0.3s;
-  white-space: nowrap;          /* prevent text from wrapping */
-  font-size: 14px;
 }
-
-/* Optional: hover effect */
 .nav-header button:hover {
   background-color: #d0d0d0;
+}
+/* Hamburger Menu for Mobile */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.hamburger div {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
 }
 
 .about-page {
@@ -183,3 +177,67 @@ body, html {
     text-align: center;
     padding: 10px 0;
 }
+/* ========= Responsive Layout ========= */
+
+/* Mobile-first (default stacking) */
+@media (max-width: 767px) {
+  .dashboard-page {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+    height: auto; /* allow scrolling */
+  }
+
+  .assignmentform,
+  .courseform,
+  .gpa-block {
+    width: 90%;
+    margin: 10px auto;
+    padding: 20px;
+  }
+
+  .gpa-block {
+    margin-bottom: 20px;
+  }
+  .nav-header {
+    display: none; /* hide nav buttons by default */
+    flex-direction: column;
+    background-color: #7a7878;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 200px;
+    padding: 10px;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .nav-header.active {
+    display: flex; /* show menu when hamburger clicked */
+  }
+
+  .hamburger {
+    display: flex; /* show hamburger icon */
+  }
+}
+
+/* Tablet (768px – 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .dashboard-page {
+    flex-direction: column;
+    padding: 20px;
+    gap: 25px;
+  }
+
+  .assignmentform,
+  .courseform,
+  .gpa-block {
+    width: 80%;
+    margin: 15px auto;
+    padding: 30px;
+  }
+
+  .gpa-block {
+    width: 250px;
+  }
+}
+
