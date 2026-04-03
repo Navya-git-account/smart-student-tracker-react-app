@@ -71,7 +71,10 @@ function App() {
             // Show toast notification
             toast.info(`⏰ Assignment "${a.title}" is due soon!`, {
               position: "top-right",
-              autoClose: 5000
+              autoClose: false,  //stays until use closes
+              toastId: a.id,
+              closeOnClick: false,
+              draggable: false
             });
 
             return { ...a, reminded: true }; // mark as reminded
@@ -101,11 +104,11 @@ function App() {
           </div>
         )}
         {activePage === "dashboard" && (
-          <div className="dashboard-page">
+          <div className="dashboard-flex">
             <div className="upcoming-deadline-block">
               <h2>Next Upcoming Assignment</h2>
               {assignments.length === 0 ? (
-                <p>No upcoming assignments</p>
+                <p className="no-assignment">No upcoming assignments</p>
               ) : (
                 (() => {
                   const now = new Date();
@@ -121,15 +124,19 @@ function App() {
 
                   return (
                     <div className="assignment-card">
-                      <p><strong>{upcoming.title}</strong> ({upcoming.subject})</p>
-                      <p>Due: {new Date(upcoming.deadline).toLocaleString()}</p>
-                      <p>⏳ Time left: {hours}h {minutes}m</p>
+                      <p className="assignment-title">{upcoming.title}</p>
+                      <p className="assignment-subject">({upcoming.subject})</p>
+                      <p className="assignment-deadline">Due: {new Date(upcoming.deadline).toLocaleString()}</p>
+                      <p className="assignment-countdown">⏳ Time left: {hours}h {minutes}m</p>
                     </div>
                   );
                 })()
               )}
             </div>
-
+            <div className="gpa-block">
+              <h2>Your GPA</h2>
+              <p>{calculateGPA()}</p>
+            </div>
             {/* Assignment Block */}
             <div className="assignmentform">
               <h2>Assignments</h2>
@@ -139,11 +146,6 @@ function App() {
                 onToggle={handleToggleCompleted}
               />
             </div>
-            <div className="gpa-block">
-              <h2>Your GPA</h2>
-              <p>{calculateGPA()}</p>
-            </div>
-
             {/* Course Block */}
             <div className="courseform">
               <h2>Courses</h2>
@@ -190,7 +192,18 @@ function App() {
       </div>
 
       <Footer />
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={false}   // ❗ ensures ALL toasts stay
+        newestOnTop={true}
+        closeOnClick={false}
+        draggable={false}
+        closeButton={({ closeToast }) => (
+          <button onClick={closeToast} style={{ color: "red", border: "none", background: "transparent" }}>
+            ✖
+          </button>
+        )}
+      />
     </>
   );
 

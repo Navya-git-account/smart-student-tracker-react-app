@@ -1,93 +1,26 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  font-family: Arial, sans-serif;
-}
-/* Parent container → left & right layout */
-.dashboard-page {
+/* =================== Dashboard Flex Layout =================== */
+.dashboard-flex {
   display: flex;
-  height: calc(100vh - 100px); /* adjust if header/footer height changes */
-  padding: 20px;
+  flex-wrap: wrap;
   gap: 20px;
-}
-.home-page {
-  height: calc(100vh - 100px); /* full viewport height minus header/footer height */
-  display: flex;
-  justify-content: center; /* horizontal center */
-  align-items: center;     /* vertical center */
-  flex-direction: column;
-  text-align: center;
+  padding: 60px 20px 80px 20px;
+  justify-content: space-between;
 }
 
-
-/* Left side (Assignments) */
-.assignmentform {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 35%;
-  background-color: #f4f4f9;
-  border: 2px solid #3f404656;
-  padding: 50px;
-  border-radius: 30px;
-  margin: 5%;
-}
-
-/* Right side (Courses) */
-.courseform {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 35%;
-  background-color: #f4f4f9;
-  padding: 50px;
-  border: 2px solid #3f404656;
-  border-radius: 30px;
-  margin: 5%;
-}
-.course-card {
-  border: 1px solid;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.course-card h4 {
-  margin-top: 0;
-}
-
-.course-card button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-.course-list-container {
-  max-height: 300px;   /* Set the height you want */
-  overflow-y: auto;    /* Add vertical scrollbar if content exceeds */
-  padding-right: 5px;  /* Prevent content hiding behind scrollbar */
-  margin-top: 15px;
-  border-top: 1px solid #ccc;
-}
-
-.gpa-block {
-
+/* Generic block styling */
+.block {
+  flex: 1 1 45%; /* grow/shrink, min width 45% */
   background-color: #f4f4f9;
   border: 2px solid #3f404656;
   border-radius: 12px;
-  width: 15%;
-  margin-top: 5%;
-  margin-bottom: 400px;
   padding: 20px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+/* =================== GPA Block =================== */
+.gpa-block {
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .gpa-block h2 {
@@ -100,155 +33,113 @@ body, html {
   font-weight: bold;
   color: #2a9d8f;
 }
-/* Header */
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: clamp(60px, 8vw, 80px); /* fluid height */
-  width: 100%;
-  background-color: #7a7878;
-  display: flex;
-  align-items: center;
-  padding: 0 clamp(10px, 5vw, 20px);
-  z-index: 1000;
+
+/* =================== Assignment / Course Cards =================== */
+.assignment-card,
+.course-card {
+  background-color: #fffbe6;
+  border: 1px solid #ffd580;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Nav buttons with space between them */
-
-/* Header container */
-.nav-header {
-  flex: 1;
-  display: flex;
-  justify-content: space-evenly;
-  gap: clamp(5px, 2vw, 10px);
-  overflow-x: auto;
+.assignment-card:hover,
+.course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.nav-header button {
-  flex: 0 0 auto;
-  padding: clamp(5px, 1vw, 5px) clamp(5px, 1vw, 5px);
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  font-size: clamp(12px, 1vw, 16px);
-  white-space: nowrap;
-  background-color: #e0e0e0;
-  transition: background 0.3s;
-}
-.nav-header button:hover {
-  background-color: #d0d0d0;
-}
-/* Hamburger Menu for Mobile */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
-.hamburger div {
-  width: 25px;
-  height: 3px;
-  background-color: #fff;
+.assignment-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #d35400;
+  margin-bottom: 4px;
 }
 
-.about-page {
-  height: calc(100vh - 100px);
-  display: flex;
-  justify-content: center; /* horizontal center */
-  align-items: center;     /* vertical center */
-  flex-direction: column;
-  text-align: center;
+.assignment-subject {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 4px;
 }
-.contact-page {
-  height: calc(100vh - 100px);
-  display: flex;
-  justify-content: center; /* horizontal center */
-  align-items: center;     /* vertical center */
-  flex-direction: column;
-  text-align: center;
+
+.assignment-deadline {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 4px;
 }
-.footer {
-    position: fixed; /* Fixes the footer to the viewport */
-    left: 0;
-    bottom: 0; /* Aligns to the bottom edge */
-    width: 100%;
-    background-color: #7a7878;
-    text-align: center;
-    padding: 10px 0;
+
+.assignment-countdown {
+  font-weight: 500;
+  color: #c0392b;
 }
-/* Upcoming assignment block container */
+
+/* =================== Upcoming Assignment Block =================== */
 .upcoming-deadline-block {
-  background-color: #fdf6e3; /* light cream */
-  border-left: 5px solid #ff9900; /* highlight with orange */
+  background-color: #fdf6e3;
+  border-left: 5px solid #ff9900;
   padding: 16px;
-  margin: 5% auto;
   border-radius: 8px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  max-width: 400px;
+  width: 100%;
+  margin: 60px auto 20px auto;
+  text-align: center;
 }
 
-/* ========= Responsive Layout ========= */
+.no-assignment {
+  color: #999;
+  font-style: italic;
+}
 
-/* Mobile-first (default stacking) */
+/* =================== Forms =================== */
+.assignmentform {
+  background-color: #fdf6e3;
+  border-left: 5px solid #ff9900;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+.courseform {
+    background-color: #fdf6e3;
+  border-left: 5px solid #ff9900;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+/* Scrollable course list */
+.course-list-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-top: 15px;
+  border-top: 1px solid #ccc;
+}
+
+/* =================== Responsive =================== */
 @media (max-width: 767px) {
-  .dashboard-page {
+  .block {
+    flex: 1 1 100%;
+  }
+  .dashboard-flex {
     flex-direction: column;
-    padding: 10px;
     gap: 15px;
-    height: auto; /* allow scrolling */
-  }
-
-  .assignmentform,
-  .courseform,
-  .gpa-block {
-    width: 90%;
-    margin: 10px auto;
-    padding: 20px;
-  }
-
-  .gpa-block {
-    margin-bottom: 20px;
-  }
-  .nav-header {
-    display: none; /* hide nav buttons by default */
-    flex-direction: column;
-    background-color: #7a7878;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 200px;
     padding: 10px;
-    border-radius: 0 0 10px 10px;
-  }
-
-  .nav-header.active {
-    display: flex; /* show menu when hamburger clicked */
-  }
-
-  .hamburger {
-    display: flex; /* show hamburger icon */
-  }
-}
-
-/* Tablet (768px – 1023px) */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .dashboard-page {
-    flex-direction: column;
-    padding: 20px;
-    gap: 25px;
   }
 
   .assignmentform,
   .courseform,
   .gpa-block {
-    width: 80%;
-    margin: 15px auto;
-    padding: 30px;
-  }
-
-  .gpa-block {
-    width: 250px;
+    width: 100%;
+    margin: 10px auto;
+    padding: 15px;
   }
 }
-
