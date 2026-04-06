@@ -57,7 +57,10 @@ function App() {
 
     return totalCredits === 0 ? 0 : (totalPoints / totalCredits).toFixed(2);
   };
-
+  const parseLocalDeadline = (dateString) => {
+    const [year, month, day] = dateString.split("-");
+    return new Date(year, month - 1, day, 23, 59, 59);
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
@@ -109,29 +112,34 @@ function App() {
               <h2>Next Upcoming Assignment</h2>
               {assignments.length === 0 ? (
                 <p className="no-assignment">No upcoming assignments</p>
-              ) : (
-                (() => {
-                  const now = new Date();
-                  const upcoming = assignments
-                    .filter(a => new Date(a.deadline) > now)
-                    .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))[0];
+              ) : (() => {
+                const now = new Date();
+                const pending = assignments.filter(a => !a.completed && parseLocalDeadline(a.deadline) > now);
 
-                  if (!upcoming) return <p>No upcoming assignments</p>;
+                if (pending.length === 0) return <p>No upcoming assignments</p>;
 
-                  const timeLeft = Math.max(new Date(upcoming.deadline) - now, 0);
+                const earliestDeadline = Math.min(...pending.map(a => parseLocalDeadline(a.deadline).getTime()));
+                const upcomingAssignments = pending.filter(
+                  a => parseLocalDeadline(a.deadline).getTime() === earliestDeadline
+                );
+
+                return upcomingAssignments.map(a => {
+                  const timeLeft = Math.max(parseLocalDeadline(a.deadline) - now, 0);
                   const hours = Math.floor(timeLeft / (1000 * 60 * 60));
                   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
                   return (
-                    <div className="assignment-card">
-                      <p className="assignment-title">{upcoming.title}</p>
-                      <p className="assignment-subject">({upcoming.subject})</p>
-                      <p className="assignment-deadline">Due: {new Date(upcoming.deadline).toLocaleString()}</p>
+                    <div className="assignment-card" key={a.id}>
+                      <p className="assignment-title">{a.title}</p>
+                      <p className="assignment-subject">({a.subject})</p>
+                      <p className="assignment-deadline">
+                        Due: {parseLocalDeadline(a.deadline).toLocaleString()}
+                      </p>
                       <p className="assignment-countdown">⏳ Time left: {hours}h {minutes}m</p>
                     </div>
                   );
-                })()
-              )}
+                });
+              })()}
             </div>
             <div className="gpa-block">
               <h2>Your GPA</h2>
