@@ -1,6 +1,6 @@
 import AssignmentItem from "./AssignmentItem";
 
-function AssignmentList({ assignments, onToggle }) {
+function AssignmentList({ assignments, onToggle, onDelete }) {
   return (
     <section>
       <h2>Assignments List</h2>
@@ -24,6 +24,7 @@ function AssignmentList({ assignments, onToggle }) {
                 key={item.id}
                 assignment={item}
                 onToggle={onToggle} // pass toggle from parent
+                onDelete={onDelete}
               />
             ))}
           </tbody>
