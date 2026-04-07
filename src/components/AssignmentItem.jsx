@@ -1,4 +1,4 @@
-function AssignmentItem({ assignment, onToggle }) {
+function AssignmentItem({ assignment, onToggle, onDelete }) {
   return (
     <tr>
       <td>{assignment.title}</td>
@@ -8,6 +8,10 @@ function AssignmentItem({ assignment, onToggle }) {
       <td>
         <button onClick={() => onToggle(assignment.id)}>
           {assignment.completed ? "Undo" : "Mark Completed"}
+        </button>
+        &nbsp;
+        <button onClick={() => onDelete(assignment.id)} style={{ color: "red" }}>
+          Delete
         </button>
       </td>
     </tr>

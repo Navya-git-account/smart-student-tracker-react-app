@@ -26,6 +26,9 @@ function App() {
       prev.map(a => a.id === id ? { ...a, completed: !a.completed } : a)
     );
   };
+  const handleDeleteAssignment = (id) => {
+    setAssignments(prev => prev.filter(a => a.id !== id));
+  };
 
   const addCourse = (course) => {
     setCourses([...courses, course]);
@@ -152,6 +155,7 @@ function App() {
               <AssignmentList
                 assignments={assignments}
                 onToggle={handleToggleCompleted}
+                onDelete={handleDeleteAssignment}
               />
             </div>
             {/* Course Block */}
