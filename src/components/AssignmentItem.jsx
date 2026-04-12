@@ -1,20 +1,31 @@
-function AssignmentItem({ assignment, onToggle, onDelete }) {
+function AssignmentItem({ assignment, onToggle, onDelete, onEdit }) {
+
   return (
-    <tr>
-      <td>{assignment.title}</td>
-      <td>{assignment.subject}</td>
-      <td>{assignment.deadline}</td>
-      <td>{assignment.completed ? "Completed" : "Pending"}</td>
-      <td>
-        <button onClick={() => onToggle(assignment.id)}>
-          {assignment.completed ? "Undo" : "Mark Completed"}
+    <div className="assignment-row">
+      <div className="assignment-left">
+        <input
+          type="checkbox"
+          checked={assignment.completed}
+          onChange={() => onToggle(assignment.id)}
+        />
+
+        <div>
+          <p className={`assignment-title ${assignment.completed ? "completed" : ""}`}>
+            {assignment.title}
+          </p>
+          <p className="assignment-meta">
+            {assignment.subject}• Due: {new Date(assignment.deadline + "T12:00:00").toLocaleDateString()}
+          </p>
+        </div>
+      </div>
+
+      <div className="assignment-actions">
+        <button className="icon-btn edit" onClick={() => onEdit(assignment)}>✏️</button>
+        <button className="icon-btn delete" onClick={() => onDelete(assignment.id)}>
+          🗑️
         </button>
-        &nbsp;
-        <button onClick={() => onDelete(assignment.id)} style={{ color: "red" }}>
-          Delete
-        </button>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 }
 

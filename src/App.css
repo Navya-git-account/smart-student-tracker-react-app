@@ -1,31 +1,51 @@
-/* =================== Dashboard Flex Layout =================== */
+/* =================== Dashboard Layout =================== */
 .dashboard-flex {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  padding: 60px 20px 80px 20px;
+  gap: 10px;
+  padding: 40px 20px 60px 20px;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
-/* Generic block styling */
-.block {
-  flex: 1 1 45%; /* grow/shrink, min width 45% */
-  background-color: #f4f4f9;
-  border: 2px solid #3f404656;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
+/* =================== Columns =================== */
+.left-column,
+.right-column {
+  flex: 1;           /* all grow equally */
+  min-width: 250px;  /* ensures responsive shrink doesn’t break layout */
+  max-width: none;
+  display: flex;
 }
-
+.middle-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.middle-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;           /* spacing between GPA and Upcoming */
+  flex: 1;             /* make the container fill middle column */
+}
 /* =================== GPA Block =================== */
 .gpa-block {
+  background-color: #f9f7f7;
+  border-top: 5px solid #0918a1;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  padding: 16px;
+  border-radius: 15px;
   text-align: center;
+  margin: 60px 0px 10px;
+  
+}
+.gpa-block:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .gpa-block h2 {
   margin-bottom: 10px;
-  color: #264653;
+  color: #000000;
 }
 
 .gpa-block p {
@@ -35,33 +55,108 @@
 }
 
 /* =================== Assignment / Course Cards =================== */
-.assignment-card,
-.course-card {
-  background-color: #fffbe6;
-  border: 1px solid #ffd580;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 10px;
-  transition: transform 0.2s, box-shadow 0.2s;
+.assignmentform,
+.courseform {
+  background-color: #ffffff;
+  border-left: 5px solid #0918a1;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 60px 20px 40px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+
+  display: flex;          
+  flex-direction: column;
+  gap: 20px;
+
+  width: 100%;           
+  m-width: 400px;       
+  height: auto;           
+  min-height: 600px;          
+
+  overflow-y: auto;
 }
 
-.assignment-card:hover,
-.course-card:hover {
-  transform: translateY(-2px);
+.assignmentform:hover,
+.courseform:hover {
+  transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.assignment-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex-direction: row;
+}
+.assignment-form input{
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #d9e2ff;
+  border-radius: 8px;
+  outline: none;
+}
+.add-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2f6bff;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .assignment-title {
   font-weight: 600;
-  font-size: 1.1rem;
-  color: #d35400;
-  margin-bottom: 4px;
+  color: #2563eb;
+  margin-bottom: 0;
 }
 
 .assignment-subject {
   font-size: 0.95rem;
   color: #555;
   margin-bottom: 4px;
+}
+.assignment-title.completed {
+  color: #16a34a; /* green */
+  text-decoration: line-through;
+}
+
+/* ACTION BUTTONS */
+.icon-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.icon-btn.edit {
+  color: #2563eb;
+}
+
+.icon-btn.delete {
+  color: #ef4444;
+}
+
+.icon-btn:hover {
+  background: #eef2ff;
+}
+
+/* VIEW ALL LINK */
+.view-all {
+  color: #2563eb;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* EMPTY TEXT */
+.empty-text {
+  color: #9ca3af;
+  font-style: italic;
 }
 
 .assignment-deadline {
@@ -77,14 +172,20 @@
 
 /* =================== Upcoming Assignment Block =================== */
 .upcoming-deadline-block {
-  background-color: #fdf6e3;
-  border-left: 5px solid #ff9900;
+  background-color: #ffffff;
+  border-top: 5px solid #ff9900;
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  width: 100%;
-  margin: 60px auto 20px auto;
+  max-width: max-content;
+  min-height: 395px;
+  margin: 20px auto 20px auto;
   text-align: center;
+  overflow-y: auto;
+}
+.upcoming-deadline-block:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .no-assignment {
@@ -93,28 +194,12 @@
 }
 
 /* =================== Forms =================== */
-.assignmentform {
-  background-color: #fdf6e3;
-  border-left: 5px solid #ff9900;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
+
+.assignment-list {
+  margin-top: 20px;
 }
-.courseform {
-    background-color: #fdf6e3;
-  border-left: 5px solid #ff9900;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-}
+
+
 /* Scrollable course list */
 .course-list-container {
   max-height: 300px;
@@ -123,23 +208,158 @@
   margin-top: 15px;
   border-top: 1px solid #ccc;
 }
+.assignment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafc;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+.assignment-row:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
 
-/* =================== Responsive =================== */
-@media (max-width: 767px) {
-  .block {
-    flex: 1 1 100%;
+/* LEFT SIDE */
+.assignment-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.assignment-left input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #22c55e; /* green */
+  cursor: pointer;
+}
+/* =================== Pages =================== */
+.home-page,
+.about-page,
+.contact-page {
+  height: calc(100vh - 100px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+/* =================== Header =================== */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: clamp(60px, 8vw, 80px);
+  width: 100%;
+  background-color: #0918a1;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* ✅ FIX */
+  padding: 0 clamp(10px, 5vw, 20px);
+  z-index: 1000;
+}
+
+.nav-header {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding: 25px;
+  gap: clamp(5px, 2vw, 10px);
+  overflow-x: auto;
+}
+
+.nav-header button {
+  flex: 0 0 auto;
+  padding: clamp(5px, 1vw, 5px) clamp(5px, 1vw, 5px);
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  font-size: clamp(12px, 1vw, 16px);
+  white-space: nowrap;
+  background-color: #0918a1;
+  color: white;
+  transition: background 0.3s;
+}
+
+.nav-header button:hover {
+  background-color: #0c046c;
+}
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 25px;     
+  margin-left: auto;   
+}
+
+.hamburger div {
+  width: 25px;
+  height: 3px;
+  background: white;
+}
+/* =================== Footer =================== */
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #f4f2f2;
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* ================= BREAKPOINT 1 (TABLET) ================= */
+@media (max-width: 1024px) {
+  .dashboard-flex {
+    flex-wrap: wrap;
   }
+
+  .left-column,
+  .middle-column,
+  .right-column {
+    flex: 1 1 48%;
+  }
+}
+
+/* ================= BREAKPOINT 2 (MOBILE) ================= */
+@media (max-width: 767px) {
+
+  /* Stack layout */
   .dashboard-flex {
     flex-direction: column;
-    gap: 15px;
-    padding: 10px;
   }
 
-  .assignmentform,
-  .courseform,
-  .gpa-block {
+  .left-column,
+  .middle-column,
+  .right-column {
     width: 100%;
-    margin: 10px auto;
-    padding: 15px;
+  }
+
+  /* Hamburger visible */
+  .hamburger {
+    display: flex;
+  }
+
+  /* Hide nav by default */
+  .nav-header {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 10px;
+    width: 200px;
+    background: #0918a1;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  /* Show when active */
+  .nav-header.active {
+    display: flex;
   }
 }

@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function AssignmentForm({ onAdd }) {
+function AssignmentForm({ onAdd, editingAssignment }) {
   const [title, setTitle] = useState("");
   const [subject, setSubject] = useState("");
   const [deadline, setDeadline] = useState("");
   const [error, setError] = useState("");
 
-  // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
+
+
+  useEffect(() => {
+    if (editingAssignment) {
+      setTitle(editingAssignment.title);
+      setSubject(editingAssignment.subject);
+      setDeadline(editingAssignment.deadline);
+    }
+  }, [editingAssignment]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,11 +26,11 @@ function AssignmentForm({ onAdd }) {
     }
 
     const newAssignment = {
-      id: Date.now(),
+      id: editingAssignment ? editingAssignment.id : Date.now(),
       title,
       subject,
       deadline,
-      completed: false,
+      completed: editingAssignment ? editingAssignment.completed : false,
     };
 
     onAdd(newAssignment);
@@ -35,34 +43,52 @@ function AssignmentForm({ onAdd }) {
   };
 
   return (
-    <section>
-      <h2>Add Assignment</h2>
+    <section className="assignment-form-section">
+      <h3>Add Assignment</h3>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
 
-      <form onSubmit={handleSubmit}>
+      <form className="assignment-form" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        
+
         <input
           type="text"
           placeholder="Subject"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         />
-        
+
         <input
           type="date"
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
-          min={today} // <-- Now works correctly
+          min={today}
         />
+        <button type="submit"
+        className="add-btn">
+          {editingAssignment ? "Update" : "Add"}
+        </button>
 
-        <button type="submit">Add</button>
+        {/* ✅ Cancel button (only in edit mode) */}
+        {editingAssignment && (
+          <button
+            type="button"
+            className="cancel-btn"
+            onClick={() => {
+              setTitle("");
+              setSubject("");
+              setDeadline("");
+              setError("");
+            }}
+          >
+            Cancel
+          </button>
+        )}
       </form>
     </section>
   );
