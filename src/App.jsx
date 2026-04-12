@@ -16,9 +16,21 @@ function App() {
   const [assignments, setAssignments] = useState([]);
   const [courses, setCourses] = useState([]);
   const [showCourseForm, setShowCourseForm] = useState(false);
+  const [editingAssignment, setEditingAssignment] = useState(null);
 
   const handleAddAssignment = (newAssignment) => {
-    setAssignments(prev => [...prev, newAssignment]);
+    setAssignments(prev => {
+      const exists = prev.find(a => a.id === newAssignment.id);
+
+      if (exists) {
+        return prev.map(a =>
+          a.id === newAssignment.id ? newAssignment : a
+        );
+      }
+      return [...prev, newAssignment];
+    });
+
+    setEditingAssignment(null);
   };
 
   const handleToggleCompleted = (id) => {
@@ -26,9 +38,22 @@ function App() {
       prev.map(a => a.id === id ? { ...a, completed: !a.completed } : a)
     );
   };
-  const handleDeleteAssignment = (id) => {
-    setAssignments(prev => prev.filter(a => a.id !== id));
+  const handleDeleteAssignment = (id) => { setAssignments(prev => prev.filter(a => a.id !== id)); };
+
+  const handleEditAssignment = (assignment) => {
+    setEditingAssignment(assignment);
+
   };
+  const handleUpdateAssignment = (updatedAssignment) => {
+    setAssignments(prev =>
+      prev.map(a =>
+        a.id === updatedAssignment.id ? updatedAssignment : a
+      )
+    );
+
+    setEditingAssignment(null);
+  };
+
 
   const addCourse = (course) => {
     setCourses([...courses, course]);
@@ -111,82 +136,96 @@ function App() {
         )}
         {activePage === "dashboard" && (
           <div className="dashboard-flex">
-            <div className="upcoming-deadline-block">
-              <h2>Next Upcoming Assignment</h2>
-              {assignments.length === 0 ? (
-                <p className="no-assignment">No upcoming assignments</p>
-              ) : (() => {
-                const now = new Date();
-                const pending = assignments.filter(a => !a.completed && parseLocalDeadline(a.deadline) > now);
-
-                if (pending.length === 0) return <p>No upcoming assignments</p>;
-
-                const earliestDeadline = Math.min(...pending.map(a => parseLocalDeadline(a.deadline).getTime()));
-                const upcomingAssignments = pending.filter(
-                  a => parseLocalDeadline(a.deadline).getTime() === earliestDeadline
-                );
-
-                return upcomingAssignments.map(a => {
-                  const timeLeft = Math.max(parseLocalDeadline(a.deadline) - now, 0);
-                  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-
-                  return (
-                    <div className="assignment-card" key={a.id}>
-                      <p className="assignment-title">{a.title}</p>
-                      <p className="assignment-subject">({a.subject})</p>
-                      <p className="assignment-deadline">
-                        Due: {parseLocalDeadline(a.deadline).toLocaleString()}
-                      </p>
-                      <p className="assignment-countdown">⏳ Time left: {hours}h {minutes}m</p>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-            <div className="gpa-block">
-              <h2>Your GPA</h2>
-              <p>{calculateGPA()}</p>
-            </div>
             {/* Assignment Block */}
-            <div className="assignmentform">
-              <h2>Assignments</h2>
-              <AssignmentForm onAdd={handleAddAssignment} />
-              <AssignmentList
-                assignments={assignments}
-                onToggle={handleToggleCompleted}
-                onDelete={handleDeleteAssignment}
-              />
+            <div className="left-column" >
+              <div className="assignmentform">
+                <h2>Assignments</h2>
+                <AssignmentForm
+                  onAdd={handleAddAssignment}
+                  onUpdate={handleUpdateAssignment}
+                  editingAssignment={editingAssignment}
+                />
+                <AssignmentList
+                  assignments={assignments}
+                  onToggle={handleToggleCompleted}
+                  onDelete={handleDeleteAssignment}
+                  onEdit={handleEditAssignment}
+                />
+              </div>
+            </div>
+            <div className="middle-column">
+              <div className="middle-block">
+                <div className="gpa-block">
+                  <h2>Your GPA</h2>
+                  <p>{calculateGPA()}</p>
+                  <small> Good Job! Keep it up.</small>
+                </div>
+                <div className="upcoming-deadline-block">
+                  <h2>Next Upcoming Assignment</h2>
+                  {assignments.length === 0 ? (
+                    <p className="no-assignment">No upcoming assignments</p>
+                  ) : (() => {
+                    const now = new Date();
+                    const pending = assignments.filter(a => !a.completed && new Date(a.deadline + "T23:59:59") > now);
+
+                    if (pending.length === 0) return <p>No upcoming assignments</p>;
+
+                    const earliestDeadline = Math.min(...pending.map(a => new Date(a.deadline + "T23:59:59").getTime()));
+                    const upcomingAssignments = pending.filter(
+                      a => new Date(a.deadline + "T23:59:59").getTime() === earliestDeadline
+                    );
+
+                    return upcomingAssignments.map(a => {
+                      const timeLeft = Math.max(new Date(a.deadline + "T23:59:59") - now, 0);
+                      const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+                      return (
+                        <div className="assignment-card" key={a.id}>
+                          <p className="assignment-title">{a.title}</p>
+                          <p className="assignment-subject">({a.subject})</p>
+                          <p className="assignment-deadline">
+                            Due: {new Date(a.deadline + "T23:59:59").toLocaleString()}
+                          </p>
+                          <p className="assignment-countdown">⏳ Time left: {hours}h {minutes}m</p>
+                        </div>
+                      );
+                    });
+                  })()}
+                </div>
+              </div>
             </div>
             {/* Course Block */}
-            <div className="courseform">
-              <h2>Courses</h2>
+            <div className="right-column">
+              <div className="courseform">
+                <h2>Courses</h2>
 
-              {/* Add Course Button */}
-              {!showCourseForm && (
-                <button
-                  className="show-form-btn"
-                  onClick={() => setShowCourseForm(true)}
-                >
-                  Add Course
-                </button>
-              )}
+                {/* Add Course Button */}
+                {!showCourseForm && (
+                  <button
+                    className="show-form-btn"
+                    onClick={() => setShowCourseForm(true)}
+                  >
+                    Add Course
+                  </button>
+                )}
 
-              {/* Course Form (shown only when showCourseForm = true) */}
-              {showCourseForm && (
-                <div className="course-form-block">
-                  <CourseForm onAddCourse={(course) => {
-                    addCourse(course);
-                    setShowCourseForm(false); // close form after adding
-                  }} />
+                {/* Course Form (shown only when showCourseForm = true) */}
+                {showCourseForm && (
+                  <div className="course-form-block">
+                    <CourseForm onAddCourse={(course) => {
+                      addCourse(course);
+                      setShowCourseForm(false); // close form after adding
+                    }} />
+                  </div>
+                )}
+
+                <hr />
+
+                {/* Course List */}
+                <div className="course-list-container">
+                  <CourseList courses={courses} onDelete={deleteCourse} />
                 </div>
-              )}
-
-              <hr />
-
-              {/* Course List */}
-              <div className="course-list-container">
-                <CourseList courses={courses} onDelete={deleteCourse} />
               </div>
             </div>
           </div>
