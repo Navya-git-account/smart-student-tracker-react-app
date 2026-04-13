@@ -74,20 +74,20 @@ function AssignmentForm({ onAdd, editingAssignment }) {
           onChange={(e) => setDeadline(e.target.value)}
           min={today}
         />
-        <button type="submit"
+        <Button type="submit"
         className="add-btn">
           {editingAssignment ? "Update" : "Add"}
-        </button>
+        </Button>
 
         {/* ✅ Cancel button (only in edit mode) */}
         {editingAssignment && (
-          <button
+          <Button
             type="button"
             className="cancel-btn"
             onClick={resetForm}
           >
             Cancel
-          </button>
+          </Button>
         )}
       </form>
     </section>

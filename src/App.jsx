@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Button from "./components/Button";
+import Home from "./components/Home";
+import About from "./components/About";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -15,19 +17,6 @@ import "./App.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-/* Pages */
-const Home = () => (
-  <div className="home-page">
-    <h1>Stay Organized. Stay Ahead.</h1>
-    <p>Track assignments, monitor grades, and manage your academic progress all in one place.</p>
-  </div>
-);
-
-const About = () => (
-  <div className="about-page">
-    <h2>For Students Everywhere</h2>
-  </div>
-);
 
 function App() {
   const [assignments, setAssignments] = useState([]);
