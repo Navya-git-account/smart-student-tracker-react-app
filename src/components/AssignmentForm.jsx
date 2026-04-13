@@ -4,14 +4,17 @@ import Button from "./Button";
 import FormMessage from "./FormMessage";
 
 function AssignmentForm({ onAdd, editingAssignment }) {
-  const [title, setTitle] = useState("");
-  const [subject, setSubject] = useState("");
-  const [deadline, setDeadline] = useState("");
-  const [error, setError] = useState("");
+  // ================= STATE =================
+  const [title, setTitle] = useState("");       // stores assignment title
+  const [subject, setSubject] = useState("");   // stores subject name
+  const [deadline, setDeadline] = useState(""); // stores selected date
+  const [error, setError] = useState("");       // stores validation error
 
+  // Get today's date (used to prevent past dates)
   const today = new Date().toISOString().split("T")[0];
 
-
+  // ================= EDIT MODE =================
+  // If editingAssignment exists, fill form with existing data
   useEffect(() => {
     if (editingAssignment) {
       setTitle(editingAssignment.title);
@@ -20,6 +23,8 @@ function AssignmentForm({ onAdd, editingAssignment }) {
     }
   }, [editingAssignment]);
 
+  // ================= RESET FORM =================
+  // Clears all input fields and error message
   const resetForm = () => {
     setTitle("");
     setSubject("");
@@ -27,23 +32,30 @@ function AssignmentForm({ onAdd, editingAssignment }) {
     setError("");
   };
 
+  // ================= FORM SUBMIT =================
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); // prevent page reload
 
+    // Validation: check if any field is empty
     if (!title || !subject || !deadline) {
       setError("All fields are required");
       return;
     }
 
+    // Create new assignment object
     const newAssignment = {
-      id: editingAssignment ? editingAssignment.id : Date.now(),
+      id: editingAssignment ? editingAssignment.id : Date.now(), // unique id
       title,
       subject,
       deadline,
-      completed: editingAssignment ? editingAssignment.completed : false,
+      completed: editingAssignment ? editingAssignment.completed : false, // preserve status
+      reminded: false, // used for toast notifications
     };
 
+    // Send data to parent component (App.jsx)
     onAdd(newAssignment);
+
+    // Reset form after submission
     resetForm();
   };
 
@@ -51,9 +63,12 @@ function AssignmentForm({ onAdd, editingAssignment }) {
     <section className="assignment-form-section">
       <h3>Add Assignment</h3>
 
-      <FormMessage type="error" message={error}/>
+      {/* Display error message */}
+      <FormMessage type="error" message={error} />
 
       <form className="assignment-form" onSubmit={handleSubmit}>
+        
+        {/* Title Input */}
         <input
           type="text"
           placeholder="Title"
@@ -61,6 +76,7 @@ function AssignmentForm({ onAdd, editingAssignment }) {
           onChange={(e) => setTitle(e.target.value)}
         />
 
+        {/* Subject Input */}
         <input
           type="text"
           placeholder="Subject"
@@ -68,18 +84,20 @@ function AssignmentForm({ onAdd, editingAssignment }) {
           onChange={(e) => setSubject(e.target.value)}
         />
 
+        {/* Deadline Input */}
         <input
           type="date"
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
-          min={today}
+          min={today} // restrict past dates
         />
-        <Button type="submit"
-        className="add-btn">
+
+        {/* Submit Button */}
+        <Button type="submit" className="add-btn">
           {editingAssignment ? "Update" : "Add"}
         </Button>
 
-        {/* ✅ Cancel button (only in edit mode) */}
+        {/* Cancel Button (only visible in edit mode) */}
         {editingAssignment && (
           <Button
             type="button"

@@ -10,8 +10,8 @@ function CourseForm({ onAddCourse }) {
     credits: "",
     grade: "",
   });
-  const [error, setError] = useState("");
-
+  const [error, setError] = useState("");  // validation error message
+  // Updates the correct field in formData when user types/selects
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -19,15 +19,15 @@ function CourseForm({ onAddCourse }) {
       ...prev,
       [name]: value,
     }));
-
+    // Clear error message once user starts correcting input
     if (error) {
       setError("");
     }
   };
-
+  // ================= HANDLE SUBMIT =================
   const handleSubmit = (e) => {
-    e.preventDefault();
-
+    e.preventDefault(); // prevent page reload
+    // Validate all fields
     if (
       !formData.name.trim() ||
       !formData.instructor.trim() ||
@@ -37,12 +37,12 @@ function CourseForm({ onAddCourse }) {
       setError("All fields are required.");
       return;
     }
-
+    // Send new course data to parent component
     onAddCourse({
       id: Date.now(),
       ...formData,
     });
-
+    // Reset form after successful submission
     setFormData({
       name: "",
       instructor: "",

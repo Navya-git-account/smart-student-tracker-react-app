@@ -4,41 +4,62 @@ function AssignmentItem({ assignment, onToggle, onDelete, onEdit }) {
 
   return (
     <div className="assignment-row">
+
+      {/* LEFT SECTION: Checkbox + Details */}
       <div className="assignment-left">
+
+        {/* Checkbox to mark assignment as completed */}
         <input
           type="checkbox"
           checked={assignment.completed}
           onChange={() => onToggle(assignment.id)}
         />
 
+        {/* Assignment Details */}
         <div>
-          <p className={`assignment-title ${assignment.completed ? "completed" : ""}`}>
+
+          {/* Title (strikethrough if completed) */}
+          <p
+            className={`assignment-title ${
+              assignment.completed ? "completed" : ""
+            }`}
+          >
             {assignment.title}
           </p>
+
+          {/* Subject + Deadline */}
           <p className="assignment-meta">
-            {assignment.subject}• Due: {new Date(assignment.deadline + "T12:00:00").toLocaleDateString()}
+            {assignment.subject} • Due:{" "}
+            {new Date(assignment.deadline + "T12:00:00").toLocaleDateString()}
           </p>
         </div>
       </div>
 
+      {/* RIGHT SECTION: Action Buttons */}
       <div className="assignment-actions">
-        <button 
-        type="button" 
-        className="icon-btn edit" 
-        onClick={() => onEdit(assignment)}
-        ariaLabel="Edit assignment"
-        title="Edit assignment">
+
+        {/* Edit Button */}
+        <button
+          type="button"
+          className="icon-btn edit"
+          onClick={() => onEdit(assignment)}
+          aria-label="Edit assignment"   
+          title="Edit assignment"
+        >
           ✏️
         </button>
-        <button 
+
+        {/* Delete Button */}
+        <button
           type="button"
-          className="icon-btn delete" 
+          className="icon-btn delete"
           onClick={() => onDelete(assignment.id)}
-          ariaLabel="Delete assignment"
+          aria-label="Delete assignment"  
           title="Delete assignment"
-          >
+        >
           🗑
         </button>
+
       </div>
     </div>
   );

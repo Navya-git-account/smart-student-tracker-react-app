@@ -14,18 +14,21 @@ import Contact from "./components/Contact";
 
 import "./App.css";
 
+
+// Toast notification library
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {
-  const [assignments, setAssignments] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [showCourseForm, setShowCourseForm] = useState(false);
-  const [editingAssignment, setEditingAssignment] = useState(null);
+    // ================= STATE =================
+  const [assignments, setAssignments] = useState([]);  // stores assignment list
+  const [courses, setCourses] = useState([]); // stores courses
+  const [showCourseForm, setShowCourseForm] = useState(false); // toggle course form
+  const [editingAssignment, setEditingAssignment] = useState(null);  // edit mode
 
   /* ================= ASSIGNMENTS ================= */
-
+// Add or update assignment
   const handleAddAssignment = (newAssignment) => {
     setAssignments(prev => {
       const exists = prev.find(a => a.id === newAssignment.id);
@@ -35,21 +38,21 @@ function App() {
     });
     setEditingAssignment(null);
   };
-
+// Toggle completed status
   const handleToggleCompleted = (id) => {
     setAssignments(prev =>
       prev.map(a => a.id === id ? { ...a, completed: !a.completed } : a)
     );
   };
-
+ // Delete assignment
   const handleDeleteAssignment = (id) => {
     setAssignments(prev => prev.filter(a => a.id !== id));
   };
-
+ // Set assignment to edit mode
   const handleEditAssignment = (assignment) => {
     setEditingAssignment(assignment);
   };
-
+// Update assignment after editing
   const handleUpdateAssignment = (updatedAssignment) => {
     setAssignments(prev =>
       prev.map(a => a.id === updatedAssignment.id ? updatedAssignment : a)
@@ -58,10 +61,11 @@ function App() {
   };
 
   /* ================= COURSES ================= */
-
+ // Add course
   const addCourse = (course) => setCourses([...courses, course]);
+ // Delete course 
   const deleteCourse = (id) => setCourses(courses.filter(c => c.id !== id));
-
+ // Calculate GPA dynamically
   const calculateGPA = () => {
     let totalPoints = 0;
     let totalCredits = 0;
@@ -82,40 +86,67 @@ function App() {
 
   /* ================= TOAST NOTIFICATIONS ================= */
 
+  // Convert date string to local end-of-day time
+  const getLocalDeadline = (dateString) => {
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day, 23, 59, 59);
+  };
   useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
+    // Function to check upcoming assignments
+  const checkUpcomingToast = () => {
+    const now = new Date();
 
-      setAssignments(prev =>
-        prev.map(a => {
-          const deadline = new Date(a.deadline);
-          const twoHours = 2 * 60 * 60 * 1000;
-
-          if (!a.reminded && deadline - now <= twoHours && deadline - now > 0) {
-            toast.info(`⏰ "${a.title}" is due soon!`, {
-              toastId: a.id
-            });
-
-            return { ...a, reminded: true };
-          }
-
-          return a;
-        })
+    setAssignments((prev) => {
+      // Filter only incomplete and future assignments
+      const pending = prev.filter(
+        (a) => !a.completed && getLocalDeadline(a.deadline) > now
       );
-    }, 60000);
 
-    return () => clearInterval(interval);
-  }, []);
+      if (pending.length === 0) return prev;
+      // Sort by nearest deadline
+      pending.sort(
+        (a, b) => getLocalDeadline(a.deadline) - getLocalDeadline(b.deadline)
+      );
+       // Get nearest assignment
+      const nextAssignment = pending[0];
+      const deadline = getLocalDeadline(nextAssignment.deadline);
+      const oneDay = 24 * 60 * 60 * 1000;  // 24 hours
+      // Show toast if within 1 day and not already notified
+      if (
+        !nextAssignment.reminded &&
+        deadline - now > 0 &&
+        deadline - now <= oneDay
+      ) {
+        toast.info(`⏰ "${nextAssignment.title}" is due soon!`, {
+          toastId: nextAssignment.id,
+        });
+        // Mark as reminded
+        return prev.map((a) =>
+          a.id === nextAssignment.id ? { ...a, reminded: true } : a
+        );
+      }
+
+      return prev;
+    });
+  };
+  // Run immediately when component loads
+  checkUpcomingToast();
+  // Run every 1 minute
+  const interval = setInterval(checkUpcomingToast, 60000);
+   // Cleanup interval
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <>
+      {/* Header */}
       <Header />
 
       <div className="container">
         <Routes>
-
+          {/* Home Page */}
           <Route path="/" element={<Home />} />
-
+          {/* Dashboard */}
           <Route
             path="/dashboard"
             element={
@@ -142,28 +173,32 @@ function App() {
                 {/* MIDDLE */}
                 <div className="middle-column">
                   <div className="middle-block">
+                    {/* GPA Section */}
                     <div className="gpa-block">
                       <h2>Your GPA</h2>
                       <p>{calculateGPA()}</p>
                       <small> Good Job! Keep it up.</small>
                     </div>
+                    {/* Upcoming Assignment Section */}
                     <div className="upcoming-deadline-block">
                       <h2>Next Upcoming Assignment</h2>
                       {assignments.length === 0 ? (
                         <p className="no-assignment">No upcoming assignments</p>
                       ) : (() => {
                         const now = new Date();
-                        const pending = assignments.filter(a => !a.completed && new Date(a.deadline + "T23:59:59") > now);
+                        // Filter pending assignments
+                        const pending = assignments.filter(a => !a.completed && getLocalDeadline(a.deadline) > now);
 
                         if (pending.length === 0) return <p>No upcoming assignments</p>;
-
-                        const earliestDeadline = Math.min(...pending.map(a => new Date(a.deadline + "T23:59:59").getTime()));
+                        // Find earliest deadline
+                        const earliestDeadline = Math.min(...pending.map(a => getLocalDeadline(a.deadline).getTime()));
+                        // Get assignments with earliest deadline
                         const upcomingAssignments = pending.filter(
                           a => new Date(a.deadline + "T23:59:59").getTime() === earliestDeadline
                         );
 
                         return upcomingAssignments.map(a => {
-                          const timeLeft = Math.max(new Date(a.deadline + "T23:59:59") - now, 0);
+                          const timeLeft = Math.max(getLocalDeadline(a.deadline) - now, 0);
                           const hours = Math.floor(timeLeft / (1000 * 60 * 60));
                           const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
@@ -206,15 +241,28 @@ function App() {
               </div>
             }
           />
-
+          {/* About Page */}
           <Route path="/about" element={<About />} />
+          {/* Contact Page */}
           <Route path="/contact" element={<Contact />} />
 
         </Routes>
       </div>
-
+      {/* Footer */}
       <Footer />
-      <ToastContainer position="top-right" autoClose={3000} />
+       {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={false}   // ❗ ensures ALL toasts stay
+        newestOnTop={true}
+        closeOnClick={false}
+        draggable={false}
+        closeButton={({ closeToast }) => (
+          <button onClick={closeToast} style={{ color: "red", border: "none", background: "transparent" }}>
+            ✖
+          </button>
+        )}
+      />
     </>
   );
 }
