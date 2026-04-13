@@ -77,7 +77,7 @@
   gap: 20px;
 
   width: 100%;
-  m-width: 400px;
+  min-width: 400px;
   height: auto;
   min-height: 600px;
 
@@ -414,21 +414,26 @@
 }
 
 /* =================== Pages =================== */
-.home-page,
-.about-page,
-.contact-page {
-  height: calc(100vh - 100px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
+.home-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url(src/assets/home-page.jpg);
+    background-position: center;
+    background-size: cover;
 }
 .about-page {
-  background-image: url("");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url(src/assets/about-page.jpg);
+    background-position: center;
+    background-size: cover;
+    font-size: xx-large;
 }
 
 /* =================== Header =================== */
@@ -491,12 +496,14 @@
 
 /* =================== contact page =================== */
 .contact-page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* vertical center */
-  align-items: center;       /* horizontal center */
-  background-color: #f5f7fb;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url(src/assets/contact-page.jpg);
+    background-position: center;
+    background-size: cover;
 }
 
 .contact-page h2 {
