@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../App.css";
 
 function AssignmentForm({ onAdd, editingAssignment }) {
   const [title, setTitle] = useState("");
