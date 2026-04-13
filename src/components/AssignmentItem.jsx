@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 function AssignmentItem({ assignment, onToggle, onDelete, onEdit }) {
 
   return (
@@ -20,8 +22,21 @@ function AssignmentItem({ assignment, onToggle, onDelete, onEdit }) {
       </div>
 
       <div className="assignment-actions">
-        <button className="icon-btn edit" onClick={() => onEdit(assignment)}>✏️</button>
-        <button className="icon-btn delete" onClick={() => onDelete(assignment.id)}>
+        <button 
+        type="button" 
+        className="icon-btn edit" 
+        onClick={() => onEdit(assignment)}
+        ariaLabel="Edit assignment"
+        title="Edit assignment">
+          ✏️
+        </button>
+        <button 
+          type="button"
+          className="icon-btn delete" 
+          onClick={() => onDelete(assignment.id)}
+          ariaLabel="Delete assignment"
+          title="Delete assignment"
+          >
           🗑
         </button>
       </div>

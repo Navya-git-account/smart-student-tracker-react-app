@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 function CourseItem({ course, onDelete }) {
   return (
     <div className="course-card">
@@ -22,8 +24,11 @@ function CourseItem({ course, onDelete }) {
         </span>
 
         <button
+          type="button"
           className="delete-btn"
           onClick={() => onDelete(course.id)}
+          ariaLabel="Delete course"
+          title="Delete course"
         >
           🗑
         </button>

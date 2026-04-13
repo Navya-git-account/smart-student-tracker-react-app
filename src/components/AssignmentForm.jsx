@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import "../App.css";
+import Button from "./Button";
+import FormMessage from "./FormMessage";
 
 function AssignmentForm({ onAdd, editingAssignment }) {
   const [title, setTitle] = useState("");
@@ -18,6 +20,13 @@ function AssignmentForm({ onAdd, editingAssignment }) {
     }
   }, [editingAssignment]);
 
+  const resetForm = () => {
+    setTitle("");
+    setSubject("");
+    setDeadline("");
+    setError("");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -35,19 +44,14 @@ function AssignmentForm({ onAdd, editingAssignment }) {
     };
 
     onAdd(newAssignment);
-
-    // Reset form
-    setTitle("");
-    setSubject("");
-    setDeadline("");
-    setError("");
+    resetForm();
   };
 
   return (
     <section className="assignment-form-section">
       <h3>Add Assignment</h3>
 
-      {error && <p className="error-text">{error}</p>}
+      <FormMessage type="error" message={error}/>
 
       <form className="assignment-form" onSubmit={handleSubmit}>
         <input
@@ -80,12 +84,7 @@ function AssignmentForm({ onAdd, editingAssignment }) {
           <button
             type="button"
             className="cancel-btn"
-            onClick={() => {
-              setTitle("");
-              setSubject("");
-              setDeadline("");
-              setError("");
-            }}
+            onClick={resetForm}
           >
             Cancel
           </button>
