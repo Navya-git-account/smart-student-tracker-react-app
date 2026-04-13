@@ -556,6 +556,21 @@
 .contact-form button:hover {
   background-color: #357ab8;
 }
+.submit-btn {
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  background-color: #0056b3; /* adjust to your theme */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+.submit-btn:active {
+  transform: scale(0.95);
+}
+.submit-btn.loading {
+  opacity: 0.7;
+}
 
 /* =================== Footer =================== */
 .footer {
