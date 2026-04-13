@@ -10,6 +10,7 @@ function Contact() {
   });
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -32,56 +33,62 @@ function Contact() {
     }
 
     setError("");
-    setSuccess(true);
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-    });
+    setLoading(true);
 
-    setTimeout(() => setSuccess(false), 3000);
-  };
+    // simulate API delay
+    setTimeout(() => {
+      setLoading(false);
+      setSuccess(true);
+      }, 1500);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+      });
 
-  return (
-    <section className="contact-page">
-      <h2>Contact Us</h2>
+      setTimeout(() => setSuccess(false), 3000);
+    };
 
-      <form className="contact-form" onSubmit={handleSubmit}>
-        <FormMessage type="error" message={error} />
+    return (
+      <section className="contact-page">
+        <h2>Contact Us</h2>
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
-        />
+        <form className="contact-form" onSubmit={handleSubmit}>
+          <FormMessage type="error" message={error} />
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
-        />
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleChange}
+          />
 
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Your Phone Number"
-          value={formData.phone}
-          onChange={handleChange}
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            value={formData.email}
+            onChange={handleChange}
+          />
 
-        <Button type="submit">Submit</Button>
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Your Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+          />
 
-        <FormMessage
-          type="success"
-          message={success ? "✅ Form submitted successfully!" : ""}
-        />
-      </form>
-    </section>
-  );
-}
+          <Button type="submit" className="submit-btn">{loading ? "Submitting..." : "Submit"}</Button>
 
-export default Contact;
+          <FormMessage
+            type="success"
+            message={success ? "✅ Form submitted successfully!" : ""}
+          />
+        </form>
+      </section>
+    );
+  }
+
+  export default Contact;
