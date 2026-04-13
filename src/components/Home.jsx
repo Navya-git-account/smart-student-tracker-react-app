@@ -9,7 +9,7 @@ function Home() {
       </div>
 
       <img
-        src="/public/student.png"
+        src="/student.png"
         alt="Students"
         className="home-image"
       />
