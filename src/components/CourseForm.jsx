@@ -1,10 +1,9 @@
 import { useState } from "react";
+import "../App.css";
 
 function CourseForm({ onAddCourse }) {
   const [formData, setFormData] = useState({
     name: "",
-    startDate: "",
-    endDate: "",
     instructor: "",
     credits: "",
     grade: ""
@@ -25,8 +24,6 @@ function CourseForm({ onAddCourse }) {
     // Validation
     if (
       !formData.name ||
-      !formData.startDate ||
-      !formData.endDate ||
       !formData.instructor ||
       !formData.credits ||
       !formData.grade
@@ -43,8 +40,6 @@ function CourseForm({ onAddCourse }) {
     // Reset form
     setFormData({
       name: "",
-      startDate: "",
-      endDate: "",
       instructor: "",
       credits: "",
       grade: ""
@@ -52,30 +47,12 @@ function CourseForm({ onAddCourse }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className= "course-form" >
-      <h3>Add Course</h3>
-
+    <form onSubmit={handleSubmit} className="course-form" >
       <input
         type="text"
         name="name"
         placeholder="Course Name"
         value={formData.name}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type="date"
-        name="startDate"
-        value={formData.startDate}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type="date"
-        name="endDate"
-        value={formData.endDate}
         onChange={handleChange}
         required
       />
@@ -98,6 +75,14 @@ function CourseForm({ onAddCourse }) {
         required
       />
       <select
+        style={{
+          width: "30%",
+          padding: "8px",
+          borderRadius: "8px",
+          border: "1px solid #ccc",
+          fontSize: "16px",
+          backgroundColor: "white"
+        }}
         name="grade"
         value={formData.grade}
         onChange={handleChange}
@@ -111,7 +96,7 @@ function CourseForm({ onAddCourse }) {
         <option value="F">F</option>
       </select>
 
-      <button type="submit">Add Course</button>
+      <button type="submit" className="addcourse-btn">Add Course</button>
     </form>
   );
 }

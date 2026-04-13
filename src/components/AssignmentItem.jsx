@@ -22,7 +22,7 @@ function AssignmentItem({ assignment, onToggle, onDelete, onEdit }) {
       <div className="assignment-actions">
         <button className="icon-btn edit" onClick={() => onEdit(assignment)}>✏️</button>
         <button className="icon-btn delete" onClick={() => onDelete(assignment.id)}>
-          🗑️
+          🗑
         </button>
       </div>
     </div>

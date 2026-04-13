@@ -1,12 +1,33 @@
 function CourseItem({ course, onDelete }) {
   return (
     <div className="course-card">
-      <h4>{course.name}</h4>
-      <p><strong>Instructor:</strong> {course.instructor}</p>
-      <p><strong>Credits:</strong> {course.credits}</p>
-      <p><strong>Duration:</strong> {course.startDate} → {course.endDate}</p>
-      <p><strong>Grade:</strong> {course.grade}</p>
-      <button onClick={() => onDelete(course.id)}>Delete</button>
+      {/* Left icon */}
+      <div className="course-icon">
+        📘
+      </div>
+
+      {/* Middle content */}
+      <div className="course-info">
+        <h4>{course.name}</h4>
+
+        <p className="course-meta">
+          {course.instructor} • {course.credits} Credits
+        </p>
+      </div>
+
+      {/* Right side */}
+      <div className="course-right">
+        <span className={`grade grade-${course.grade}`}>
+          {course.grade}
+        </span>
+
+        <button
+          className="delete-btn"
+          onClick={() => onDelete(course.id)}
+        >
+          🗑
+        </button>
+      </div>
     </div>
   );
 }
