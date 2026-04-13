@@ -1,35 +1,48 @@
 import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AssignmentForm from "./components/AssignmentForm";
 import AssignmentList from "./components/AssignmentList";
 import CourseForm from "./components/CourseForm";
 import CourseList from "./components/CourseList";
+import Contact from "./components/Contact";
+
 import "./App.css";
 
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+/* Pages */
+const Home = () => (
+  <div className="home-page">
+    <h1>Stay Organized. Stay Ahead.</h1>
+    <p>Track assignments, monitor grades, and manage your academic progress all in one place.</p>
+  </div>
+);
+
+const About = () => (
+  <div className="about-page">
+    <h2>For Students Everywhere</h2>
+  </div>
+);
 
 function App() {
-  const [activePage, setActivePage] = useState("home");
   const [assignments, setAssignments] = useState([]);
   const [courses, setCourses] = useState([]);
   const [showCourseForm, setShowCourseForm] = useState(false);
   const [editingAssignment, setEditingAssignment] = useState(null);
 
+  /* ================= ASSIGNMENTS ================= */
+
   const handleAddAssignment = (newAssignment) => {
     setAssignments(prev => {
       const exists = prev.find(a => a.id === newAssignment.id);
-
-      if (exists) {
-        return prev.map(a =>
-          a.id === newAssignment.id ? newAssignment : a
-        );
-      }
-      return [...prev, newAssignment];
+      return exists
+        ? prev.map(a => a.id === newAssignment.id ? newAssignment : a)
+        : [...prev, newAssignment];
     });
-
     setEditingAssignment(null);
   };
 
@@ -38,291 +51,182 @@ function App() {
       prev.map(a => a.id === id ? { ...a, completed: !a.completed } : a)
     );
   };
-  const handleDeleteAssignment = (id) => { setAssignments(prev => prev.filter(a => a.id !== id)); };
+
+  const handleDeleteAssignment = (id) => {
+    setAssignments(prev => prev.filter(a => a.id !== id));
+  };
 
   const handleEditAssignment = (assignment) => {
     setEditingAssignment(assignment);
-
   };
+
   const handleUpdateAssignment = (updatedAssignment) => {
     setAssignments(prev =>
-      prev.map(a =>
-        a.id === updatedAssignment.id ? updatedAssignment : a
-      )
+      prev.map(a => a.id === updatedAssignment.id ? updatedAssignment : a)
     );
-
     setEditingAssignment(null);
   };
 
+  /* ================= COURSES ================= */
 
-  const addCourse = (course) => {
-    setCourses([...courses, course]);
-  };
-
-  const deleteCourse = (id) => {
-    setCourses(courses.filter(c => c.id !== id));
-  };
-  const getGradePoints = (grade) => {
-    switch (grade) {
-      case "A": return 4;
-      case "B": return 3;
-      case "C": return 2;
-      case "D": return 1;
-      case "F": return 0;
-      default: return 0;
-    }
-  };
+  const addCourse = (course) => setCourses([...courses, course]);
+  const deleteCourse = (id) => setCourses(courses.filter(c => c.id !== id));
 
   const calculateGPA = () => {
     let totalPoints = 0;
     let totalCredits = 0;
 
     courses.forEach(course => {
-      const points = getGradePoints(course.grade);
+      const points =
+        course.grade === "A" ? 4 :
+          course.grade === "B" ? 3 :
+            course.grade === "C" ? 2 :
+              course.grade === "D" ? 1 : 0;
+
       totalPoints += points * Number(course.credits);
       totalCredits += Number(course.credits);
     });
 
     return totalCredits === 0 ? 0 : (totalPoints / totalCredits).toFixed(2);
   };
-  const parseLocalDeadline = (dateString) => {
-    const [year, month, day] = dateString.split("-");
-    return new Date(year, month - 1, day, 23, 59, 59);
-  };
+
+  /* ================= TOAST NOTIFICATIONS ================= */
+
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
 
-      setAssignments(prevAssignments => {
-        return prevAssignments.map(a => {
+      setAssignments(prev =>
+        prev.map(a => {
           const deadline = new Date(a.deadline);
           const twoHours = 2 * 60 * 60 * 1000;
 
-          if (!a.reminded && deadline - now > 0 && deadline - now <= twoHours) {
-            // Show toast notification
-            toast.info(`⏰ Assignment "${a.title}" is due soon!`, {
-              position: "top-right",
-              autoClose: false,  //stays until use closes
-              toastId: a.id,
-              closeOnClick: false,
-              draggable: false
+          if (!a.reminded && deadline - now <= twoHours && deadline - now > 0) {
+            toast.info(`⏰ "${a.title}" is due soon!`, {
+              toastId: a.id
             });
 
-            return { ...a, reminded: true }; // mark as reminded
+            return { ...a, reminded: true };
           }
 
           return a;
-        });
-      });
-    }, 60000); // check every 1 minute
+        })
+      );
+    }, 60000);
 
-    return () => clearInterval(interval); // cleanup on unmount
+    return () => clearInterval(interval);
   }, []);
-/*===================contact-page==================*/
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: ""
-  });
-
-  const [success, setSuccess] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // simple validation
-    if (!formData.name || !formData.email || !formData.phone) {
-      alert("Please fill all fields");
-      return;
-    }
-
-    console.log("Submitted Data:", formData);
-
-    setSuccess(true);
-
-    // reset form
-    setFormData({ name: "", email: "", phone: "" });
-
-    // hide success message after 3 sec
-    setTimeout(() => setSuccess(false), 3000);
-  };
-
 
   return (
     <>
-      {/* pass setactivepage to header for navigation */}
-      <Header setActivePage={setActivePage} />
+      <Header />
 
       <div className="container">
-        {activePage === "home" && (
-          <div className="home-page">
-            <h1>Stay Organized. Stay Ahead.</h1>
-            <p>
-              Track assignments, monitor grades, and manage your academic progress
-              all in one place. </p>
-            <p> [Go to Dashboard]</p>
-          </div>
-        )}
-        {activePage === "dashboard" && (
-          <div className="dashboard-flex">
-            {/* Assignment Block */}
-            <div className="left-column" >
-              <div className="assignmentform">
-                <h2>Assignments</h2>
-                <AssignmentForm
-                  onAdd={handleAddAssignment}
-                  onUpdate={handleUpdateAssignment}
-                  editingAssignment={editingAssignment}
-                />
-                <AssignmentList
-                  assignments={assignments}
-                  onToggle={handleToggleCompleted}
-                  onDelete={handleDeleteAssignment}
-                  onEdit={handleEditAssignment}
-                />
-              </div>
-            </div>
-            <div className="middle-column">
-              <div className="middle-block">
-                <div className="gpa-block">
-                  <h2>Your GPA</h2>
-                  <p>{calculateGPA()}</p>
-                  <small> Good Job! Keep it up.</small>
-                </div>
-                <div className="upcoming-deadline-block">
-                  <h2>Next Upcoming Assignment</h2>
-                  {assignments.length === 0 ? (
-                    <p className="no-assignment">No upcoming assignments</p>
-                  ) : (() => {
-                    const now = new Date();
-                    const pending = assignments.filter(a => !a.completed && new Date(a.deadline + "T23:59:59") > now);
+        <Routes>
 
-                    if (pending.length === 0) return <p>No upcoming assignments</p>;
+          <Route path="/" element={<Home />} />
 
-                    const earliestDeadline = Math.min(...pending.map(a => new Date(a.deadline + "T23:59:59").getTime()));
-                    const upcomingAssignments = pending.filter(
-                      a => new Date(a.deadline + "T23:59:59").getTime() === earliestDeadline
-                    );
+          <Route
+            path="/dashboard"
+            element={
+              <div className="dashboard-flex">
 
-                    return upcomingAssignments.map(a => {
-                      const timeLeft = Math.max(new Date(a.deadline + "T23:59:59") - now, 0);
-                      const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                {/* LEFT */}
+                <div className="left-column">
+                  <div className="assignmentform">
+                    <h2>Assignments</h2>
+                    <AssignmentForm
+                      onAdd={handleAddAssignment}
+                      onUpdate={handleUpdateAssignment}
+                      editingAssignment={editingAssignment}
+                    />
 
-                      return (
-                        <div className="assignment-card" key={a.id}>
-                          <p className="assignment-title">{a.title}</p>
-                          <p className="assignment-subject">({a.subject})</p>
-                          <p className="assignment-deadline">
-                            Due: {new Date(a.deadline + "T23:59:59").toLocaleString()}
-                          </p>
-                          <p className="assignment-countdown">⏳ Time left: {hours}h {minutes}m</p>
-                        </div>
-                      );
-                    });
-                  })()}
-                </div>
-              </div>
-            </div>
-            {/* Course Block */}
-            <div className="right-column">
-              <div className="courseform">
-                <h2>Courses</h2>
-
-                {/* Add Course Button */}
-                {!showCourseForm && (
-                  <button
-                    className="show-form-btn"
-                    onClick={() => setShowCourseForm(true)}
-                  >
-                    Add Course
-                  </button>
-                )}
-
-                {/* Course Form (shown only when showCourseForm = true) */}
-                {showCourseForm && (
-                  <div className="course-form-block">
-                    <CourseForm onAddCourse={(course) => {
-                      addCourse(course);
-                      setShowCourseForm(false); // close form after adding
-                    }} />
+                    <AssignmentList
+                      assignments={assignments}
+                      onToggle={handleToggleCompleted}
+                      onDelete={handleDeleteAssignment}
+                      onEdit={handleEditAssignment}
+                    />
                   </div>
-                )}
+                </div>
+                {/* MIDDLE */}
+                <div className="middle-column">
+                  <div className="middle-block">
+                    <div className="gpa-block">
+                      <h2>Your GPA</h2>
+                      <p>{calculateGPA()}</p>
+                      <small> Good Job! Keep it up.</small>
+                    </div>
+                    <div className="upcoming-deadline-block">
+                      <h2>Next Upcoming Assignment</h2>
+                      {assignments.length === 0 ? (
+                        <p className="no-assignment">No upcoming assignments</p>
+                      ) : (() => {
+                        const now = new Date();
+                        const pending = assignments.filter(a => !a.completed && new Date(a.deadline + "T23:59:59") > now);
 
-                <hr />
+                        if (pending.length === 0) return <p>No upcoming assignments</p>;
 
-                {/* Course List */}
-                <div className="course-list-container">
-                  <CourseList courses={courses} onDelete={deleteCourse} />
+                        const earliestDeadline = Math.min(...pending.map(a => new Date(a.deadline + "T23:59:59").getTime()));
+                        const upcomingAssignments = pending.filter(
+                          a => new Date(a.deadline + "T23:59:59").getTime() === earliestDeadline
+                        );
+
+                        return upcomingAssignments.map(a => {
+                          const timeLeft = Math.max(new Date(a.deadline + "T23:59:59") - now, 0);
+                          const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+                          return (
+                            <div className="assignment-card" key={a.id}>
+                              <p className="assignment-title">{a.title}</p>
+                              <p className="assignment-subject">({a.subject})</p>
+                              <p className="assignment-deadline">
+                                Due: {new Date(a.deadline + "T23:59:59").toLocaleString()}
+                              </p>
+                              <p className="assignment-countdown">⏳ Time left: {hours}h {minutes}m</p>
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  </div>
+                </div>
+                {/* RIGHT */}
+                <div className="right-column">
+                  <div className="courseform">
+                    <h2>Courses</h2>
+
+                    {!showCourseForm && (
+                      <button className="show-form-btn" onClick={() => setShowCourseForm(true)}>
+                        Add Course
+                      </button>
+                    )}
+
+                    {showCourseForm && (
+                      <CourseForm onAddCourse={(course) => {
+                        addCourse(course);
+                        setShowCourseForm(false);
+                      }} />
+                    )}
+
+                    <CourseList courses={courses} onDelete={deleteCourse} />
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        )}
-        {activePage === "about" && (
-          <div className="about-page">
-            <h2>For Students Everywhere</h2>
-          </div>
-        )}
-        {activePage === "contact" && (
-          <div className="contact-page">
-            <h2>Contact us</h2>
-            <form className="contact-form" onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleChange}
-              />
+            }
+          />
 
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={handleChange}
-              />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
 
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Your Phone"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-
-              <button type="submit">Submit</button>
-
-              {success && <p className="success">✅ Form submitted successfully!</p>}
-            </form>
-          </div>
-        )}
+        </Routes>
       </div>
 
       <Footer />
-      <ToastContainer
-        position="top-right"
-        autoClose={false}   // ❗ ensures ALL toasts stay
-        newestOnTop={true}
-        closeOnClick={false}
-        draggable={false}
-        closeButton={({ closeToast }) => (
-          <button onClick={closeToast} style={{ color: "red", border: "none", background: "transparent" }}>
-            ✖
-          </button>
-        )}
-      />
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
-
 }
 
 export default App;

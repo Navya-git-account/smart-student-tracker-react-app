@@ -17,12 +17,14 @@
   /* ensures responsive shrink doesn’t break layout */
   max-width: none;
   display: flex;
+  margin-top: 1%;
 }
 
 .middle-column {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 1%;
 }
 
 .middle-block {
@@ -78,7 +80,7 @@
 
   width: 100%;
   min-width: 400px;
-  height: auto;
+  height: 100%;
   min-height: 600px;
 
   overflow-y: auto;
@@ -462,7 +464,7 @@
   overflow-x: auto;
 }
 
-.nav-header button {
+.nav-header a {
   flex: 0 0 auto;
   padding: clamp(5px, 1vw, 5px) clamp(5px, 1vw, 5px);
   cursor: pointer;
@@ -472,10 +474,12 @@
   white-space: nowrap;
   background-color: #0918a1;
   color: white;
+  text-decoration: none;
   transition: background 0.3s;
+  display: inline-block;
 }
 
-.nav-header button:hover {
+.nav-header a:hover {
   background-color: #0c046c;
 }
 

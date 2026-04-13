@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../App.css";
 
 function CourseForm({ onAddCourse }) {
   const [formData, setFormData] = useState({
@@ -96,7 +95,7 @@ function CourseForm({ onAddCourse }) {
         <option value="F">F</option>
       </select>
 
-      <button type="submit" className="addcourse-btn">Add Course</button>
+      <button type="submit" className="addcourse-btn ">Add Course</button>
     </form>
   );
 }
