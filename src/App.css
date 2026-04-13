@@ -11,36 +11,44 @@
 /* =================== Columns =================== */
 .left-column,
 .right-column {
-  flex: 1;           /* all grow equally */
-  min-width: 250px;  /* ensures responsive shrink doesn’t break layout */
+  flex: 1;
+  /* all grow equally */
+  min-width: 250px;
+  /* ensures responsive shrink doesn’t break layout */
   max-width: none;
   display: flex;
 }
+
 .middle-column {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
+
 .middle-block {
   display: flex;
   flex-direction: column;
-  gap: 10px;           /* spacing between GPA and Upcoming */
-  flex: 1;             /* make the container fill middle column */
+  gap: 10px;
+  /* spacing between GPA and Upcoming */
+  flex: 1;
+  /* make the container fill middle column */
 }
+
 /* =================== GPA Block =================== */
 .gpa-block {
   background-color: #f9f7f7;
   border-top: 5px solid #0918a1;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   padding: 16px;
   border-radius: 15px;
   text-align: center;
   margin: 60px 0px 10px;
-  
+
 }
+
 .gpa-block:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .gpa-block h2 {
@@ -54,7 +62,7 @@
   color: #2a9d8f;
 }
 
-/* =================== Assignment / Course Cards =================== */
+/* =================== Assignment  =================== */
 .assignmentform,
 .courseform {
   background-color: #ffffff;
@@ -62,16 +70,16 @@
   border-radius: 15px;
   padding: 20px;
   margin: 60px 20px 40px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 
-  display: flex;          
+  display: flex;
   flex-direction: column;
   gap: 20px;
 
-  width: 100%;           
-  m-width: 400px;       
-  height: auto;           
-  min-height: 600px;          
+  width: 100%;
+  m-width: 400px;
+  height: auto;
+  min-height: 600px;
 
   overflow-y: auto;
 }
@@ -79,21 +87,24 @@
 .assignmentform:hover,
 .courseform:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
 .assignment-form {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   flex-direction: row;
 }
-.assignment-form input{
+
+.assignment-form input {
   flex: 1;
   padding: 10px;
   border: 1px solid #d9e2ff;
   border-radius: 8px;
   outline: none;
 }
+
 .add-btn {
   padding: 10px 16px;
   border: none;
@@ -117,8 +128,10 @@
   color: #555;
   margin-bottom: 4px;
 }
+
 .assignment-title.completed {
-  color: #16a34a; /* green */
+  color: #16a34a;
+  /* green */
   text-decoration: line-through;
 }
 
@@ -176,16 +189,17 @@
   border-top: 5px solid #ff9900;
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   max-width: max-content;
-  min-height: 395px;
+  min-height: 375px;
   margin: 20px auto 20px auto;
   text-align: center;
   overflow-y: auto;
 }
+
 .upcoming-deadline-block:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .no-assignment {
@@ -208,6 +222,7 @@
   margin-top: 15px;
   border-top: 1px solid #ccc;
 }
+
 .assignment-row {
   display: flex;
   justify-content: space-between;
@@ -219,8 +234,9 @@
   border: 1px solid #e5e7eb;
   transition: all 0.2s ease;
 }
+
 .assignment-row:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* LEFT SIDE */
@@ -233,9 +249,170 @@
 .assignment-left input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #22c55e; /* green */
+  accent-color: #22c55e;
+  /* green */
   cursor: pointer;
 }
+
+/* ===== Course Card ===== */
+.course-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+
+  padding: 14px 16px;
+  margin-bottom: 12px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: 0.2s;
+}
+
+.course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.show-form-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2f6bff;
+  color: white;
+  font-size: 14px;
+  width: 30%;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.course-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    flex-direction: row;
+}
+.course-form input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #d9e2ff;
+  border-radius: 8px;
+  outline: none;
+}
+
+.grade-select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
+}
+.addcourse-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2f6bff;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* ===== Icon ===== */
+.course-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e8f0ff;
+  font-size: 18px;
+}
+
+/* ===== Middle Info ===== */
+.course-info {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.course-info h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.course-meta {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ===== Right Side ===== */
+.course-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== Grade Badge ===== */
+.grade {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+/* Colors like your image */
+.grade-A {
+  background: #eafff0;
+  color: #16a34a;
+  border-color: #86efac;
+}
+
+.grade-B {
+  background: #fff7ed;
+  color: #f97316;
+  border-color: #fdba74;
+}
+
+.grade-C {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #93c5fd;
+}
+
+.grade-D {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fcd34d;
+}
+
+.grade-F {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+/* ===== Delete Button ===== */
+.delete-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  color: #ef4444;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  transform: scale(1.2);
+}
+
 /* =================== Pages =================== */
 .home-page,
 .about-page,
@@ -247,6 +424,13 @@
   flex-direction: column;
   text-align: center;
 }
+.about-page {
+  background-image: url("");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* =================== Header =================== */
 .header {
   position: fixed;
@@ -258,7 +442,8 @@
   color: white;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* ✅ FIX */
+  justify-content: space-between;
+  /* ✅ FIX */
   padding: 0 clamp(10px, 5vw, 20px);
   z-index: 1000;
 }
@@ -288,13 +473,14 @@
 .nav-header button:hover {
   background-color: #0c046c;
 }
+
 .hamburger {
   display: none;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
-  padding: 25px;     
-  margin-left: auto;   
+  padding: 25px;
+  margin-left: auto;
 }
 
 .hamburger div {
@@ -302,6 +488,55 @@
   height: 3px;
   background: white;
 }
+
+/* =================== contact page =================== */
+.contact-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* vertical center */
+  align-items: center;       /* horizontal center */
+  background-color: #f5f7fb;
+}
+
+.contact-page h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #333;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 300px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.contact-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.contact-form button {
+  padding: 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.contact-form button:hover {
+  background-color: #357ab8;
+}
+
 /* =================== Footer =================== */
 .footer {
   position: fixed;

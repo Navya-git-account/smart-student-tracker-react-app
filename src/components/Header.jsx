@@ -10,7 +10,7 @@ function Header({ setActivePage }) {
   };
   return (
     <header className="header">
-      <h1 className="logo">Smart Student Tracker</h1>
+      <h1 className="logo"> 🧑🏻‍🎓 Smart Student Tracker </h1>
       <div
         className="hamburger"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
