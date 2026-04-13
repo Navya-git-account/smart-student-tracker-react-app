@@ -1,40 +1,54 @@
 import React, { useState } from "react";
+import Button from "./Button";
+import FormMessage from "./FormMessage";
 
 function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: ""
+    phone: "",
   });
-
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+
+    if (error) {
+      setError("");
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.phone) {
-      alert("Please fill all fields");
+    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+      setError("Please fill all fields.");
+      setSuccess(false);
       return;
     }
 
+    setError("");
     setSuccess(true);
-    setFormData({ name: "", email: "", phone: "" });
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+    });
 
     setTimeout(() => setSuccess(false), 3000);
   };
 
   return (
-    <div className="contact-page">
+    <section className="contact-page">
       <h2>Contact Us</h2>
 
       <form className="contact-form" onSubmit={handleSubmit}>
+        <FormMessage type="error" message={error} />
+
         <input
           type="text"
           name="name"
@@ -54,18 +68,19 @@ function Contact() {
         <input
           type="tel"
           name="phone"
-          placeholder="Your Phone"
+          placeholder="Your Phone Number"
           value={formData.phone}
           onChange={handleChange}
         />
 
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
 
-        {success && (
-          <p className="success">✅ Form submitted successfully!</p>
-        )}
+        <FormMessage
+          type="success"
+          message={success ? "✅ Form submitted successfully!" : ""}
+        />
       </form>
-    </div>
+    </section>
   );
 }
 

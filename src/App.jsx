@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import Button from "./components/Button";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -198,9 +199,9 @@ function App() {
                     <h2>Courses</h2>
 
                     {!showCourseForm && (
-                      <button className="show-form-btn" onClick={() => setShowCourseForm(true)}>
+                      <Button className="show-form-btn" onClick={() => setShowCourseForm(true)}>
                         Add Course
-                      </button>
+                      </Button>
                     )}
 
                     {showCourseForm && (

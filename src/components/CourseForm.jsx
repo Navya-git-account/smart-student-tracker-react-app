@@ -1,59 +1,67 @@
 import { useState } from "react";
+import Button from "./Button";
+import FormMessage from "./FormMessage";
+import "../App.css";
 
 function CourseForm({ onAddCourse }) {
   const [formData, setFormData] = useState({
     name: "",
     instructor: "",
     credits: "",
-    grade: ""
+    grade: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (error) {
+      setError("");
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validation
     if (
-      !formData.name ||
-      !formData.instructor ||
+      !formData.name.trim() ||
+      !formData.instructor.trim() ||
       !formData.credits ||
       !formData.grade
     ) {
-      alert("All fields are required");
+      setError("All fields are required.");
       return;
     }
 
     onAddCourse({
       id: Date.now(),
-      ...formData
+      ...formData,
     });
 
-    // Reset form
     setFormData({
       name: "",
       instructor: "",
       credits: "",
-      grade: ""
+      grade: "",
     });
+    setError("");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="course-form" >
+    <form  onSubmit={handleSubmit} className="course-form">
+      <FormMessage type="error" message={error} />
+
       <input
         type="text"
         name="name"
         placeholder="Course Name"
         value={formData.name}
         onChange={handleChange}
-        required
       />
 
       <input
@@ -62,7 +70,6 @@ function CourseForm({ onAddCourse }) {
         placeholder="Instructor Name"
         value={formData.instructor}
         onChange={handleChange}
-        required
       />
 
       <input
@@ -71,21 +78,13 @@ function CourseForm({ onAddCourse }) {
         placeholder="Credits"
         value={formData.credits}
         onChange={handleChange}
-        required
+        min="1"
       />
+
       <select
-        style={{
-          width: "30%",
-          padding: "8px",
-          borderRadius: "8px",
-          border: "1px solid #ccc",
-          fontSize: "16px",
-          backgroundColor: "white"
-        }}
         name="grade"
         value={formData.grade}
         onChange={handleChange}
-        required
       >
         <option value="">Select Grade</option>
         <option value="A">A</option>
@@ -95,7 +94,7 @@ function CourseForm({ onAddCourse }) {
         <option value="F">F</option>
       </select>
 
-      <button type="submit" className="addcourse-btn ">Add Course</button>
+      <Button className="addcourse-btn" type="submit">Add Course</Button>
     </form>
   );
 }
